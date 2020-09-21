@@ -2,8 +2,9 @@ import java.util.List;
 
 public class SimpleArrayList {
     private String[] lArray;
+    public String printMe = "hi: ";
     public SimpleArrayList() {
-        lArray = new String[10];
+        lArray = new String[0];
     }
     public SimpleArrayList(int initialCapacity) {
         if (initialCapacity >= 0){
@@ -21,14 +22,40 @@ public class SimpleArrayList {
         }
     }
     public void add(int index, String s){
-        if (index >= 0){
-            lArray[index] = s;
+        if (index >= 0 && index < lArray.length){
+            String[] cpy = new String[lArray.length + 1];
+            for(int i = 0; i < index; i++){
+                cpy[i] = lArray[i];
+            }
+            cpy[index] = s;
+            for(int d = index + 1; d < cpy.length; d++){
+                int preD = d - 1;
+                cpy[d] = lArray[preD];
+            }
+            lArray = cpy;
+        } else {
+            int initSize = lArray.length - 1;
+            int finalSize = 0;
+            for (int i=0; i <= initSize; i++){
+            if (lArray[i] != null && lArray[i] != ""){
+                finalSize++;
+            }
         }
+            String e = "Index: " + index + ", Size: " + finalSize;
+            throw new IndexOutOfBoundsException(e);
+        }
+       
     }
     public boolean add(String s){
-        int lArrayIndex = lArray.length;
-        lArray[++lArrayIndex] = s;
-        
+        int len = lArray.length;
+        String[] tmpArr = new String[lArray.length + 1];    
+        for (int i = 0; i < len; i++){
+            //if (lArray[i] != null){
+                tmpArr[i] = lArray[i];
+            //}
+        }
+        tmpArr[lArray.length] = s;
+        lArray = tmpArr;
         return true;
     }
     public void clear(){
@@ -51,7 +78,7 @@ public class SimpleArrayList {
         if (index >= 0 && index < len){
             returnMe = lArray[index];
         } else {
-            String s = "Index " + index + " out of bounds for length " + len;
+            String s = "Index " + index + " out of bounds for length " + lArray.length;
             throw new IndexOutOfBoundsException(s);
         }
         return returnMe;
@@ -82,12 +109,12 @@ public class SimpleArrayList {
         String returnMe = "";
         if (index >= 0 && index <= len){
             returnMe = lArray[index];
-            lArray[index] = "";
+            lArray[index] = null;
             if(index != len){
                 for(int i = index; i < len; i++){
                     int mod = i + 1;
                     lArray[i] = lArray[mod];
-                    lArray[++i] = "";
+                    lArray[++i] = null;
                 }
             }
         } else {
@@ -101,13 +128,12 @@ public class SimpleArrayList {
         boolean setReturn = false;
         for(int i = 0; i <= len; i++){
             if (lArray[i] == s){
-                lArray[i] = "";
+                lArray[i] = null;
                 setReturn = true;
                 for(int x = i; x < len; x++){
                     int mod = x + 1;
                     lArray[x] = lArray[mod];
-                    lArray[++x] = "";
-                    
+                    lArray[++x] = null;
                 }
             }
         }
@@ -115,9 +141,18 @@ public class SimpleArrayList {
     }
     public String set(int index, String s){
         String returnMe = "";
-        if (index >= 0){
+        if (index >= 0 && index < lArray.length){
             returnMe = lArray[index];
+            if (s == null){
+                s = "null";
+            }
+            if (s == ""){
+                s = "";
+            }
             lArray[index] = s;
+        } else {
+            String e = "Index " + index + " out of bounds for length " + lArray.length;
+            throw new IndexOutOfBoundsException(e);
         }
         return returnMe;
     }
@@ -125,7 +160,7 @@ public class SimpleArrayList {
         int initSize = lArray.length - 1;
         int finalSize = 0;
         for (int i=0; i <= initSize; i++){
-            if (lArray[i] != null && lArray[i] != ""){
+            if (lArray[i] != null){
                 finalSize++;
             }
         }
@@ -135,10 +170,10 @@ public class SimpleArrayList {
         int len = lArray.length - 1;
         for (int i = 0; i < len; i++){
             if (lArray[i] == null){
-                for(int x = i; x <= len; x++){
-                    String strcpy = lArray[++x];
+                for(int x = i; x < len; x++){
+                    String strcpy = lArray[x];
                     lArray[x] = strcpy;
-                    lArray[++x] = "";
+                    lArray[x] = null;
                 }
             }
         }    
